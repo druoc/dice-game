@@ -7,30 +7,34 @@ namespace DiceGame
         static void Main(string[] args)
         {
             Dice dice = new Dice();
-            int diceNumber = dice.DiceRoll();
-            int amountOfGuesses = 1;
+            Guess guess = new Guess();
+            int diceNumber = dice.Roll();
             
             Console.WriteLine("Dice rolled, try and guess which number:");
-            string userGuess = Console.ReadLine();
-            int userGuessConverted = Convert.ToInt32(userGuess);
+            string userInput = Console.ReadLine();
+            int userGuessConverted = guess.ConvertInputToInt(userInput);
+
 
             do
             {
                 if (userGuessConverted == diceNumber)
                 {
                     Console.WriteLine($"Correct! The number was {diceNumber}");
-                    Console.WriteLine($"It took {amountOfGuesses} guesses.");
-                    amountOfGuesses = 3;
+                    Console.WriteLine($"It took {guess.amountOfGuesses} guesses.");
                 }
                 else
                 {
-                    Console.WriteLine($"Incorrect, try again! You have {3 - amountOfGuesses} guesses left.");
-                    amountOfGuesses++;
-                    userGuess = Console.ReadLine();
+                    Console.WriteLine($"Incorrect, try again! You have {3 -guess.amountOfGuesses} guesses left.");
+                    guess.UpdateAmountOfGuesses();
+                    if(guess.amountOfGuesses == 3)
+                    {
+                        guess.UpdateLoseStatus();
+                    }
+                    userInput = Console.ReadLine();
                 }
-            } while (amountOfGuesses < 3);
+            } while (guess.amountOfGuesses < 3 && guess.hasUserLost == false);
 
-            if (amountOfGuesses == 3)
+            if (guess.amountOfGuesses == 3)
             {
                 Console.WriteLine("You lose! better luck next time!");
             }

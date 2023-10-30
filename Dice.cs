@@ -17,7 +17,7 @@ namespace DiceGame
             diceNumber = randomNumber.Next(1, 6);
         }
 
-        public int DiceRoll()
+        public int Roll()
         {
             return diceNumber;
         }
