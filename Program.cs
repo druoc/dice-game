@@ -11,33 +11,48 @@ namespace DiceGame
             int diceNumber = dice.Roll();
             
             Console.WriteLine("Dice rolled, try and guess which number:");
-            string userInput = Console.ReadLine();
-            int userGuessConverted = guess.ConvertInputToInt(userInput);
-
-
-            do
+            for (int guessCount = 1; guessCount <= guess.maxGuesses; guessCount++)
             {
-                if (userGuessConverted == diceNumber)
+                int userGuess = GetUserInput();
+
+                if (userGuess == diceNumber)
                 {
                     Console.WriteLine($"Correct! The number was {diceNumber}");
-                    Console.WriteLine($"It took {guess.amountOfGuesses} guesses.");
+                    Console.WriteLine($"It took you {guessCount} guesses.");
+                    break;
                 }
                 else
                 {
-                    Console.WriteLine($"Incorrect, try again! You have {3 -guess.amountOfGuesses} guesses left.");
-                    guess.UpdateAmountOfGuesses();
-                    if(guess.amountOfGuesses == 3)
+                    int guessesLeft = guess.maxGuesses - guessCount;
+                    if (guessesLeft > 0)
                     {
-                        guess.UpdateLoseStatus();
+                        Console.WriteLine($"Incorrect, try again! You have {guessesLeft} guesses left.");
                     }
-                    userInput = Console.ReadLine();
+                    else
+                    {
+                        Console.WriteLine("You've used all your guesses. Game over!");
+                    }
                 }
-            } while (guess.amountOfGuesses < 3 && guess.hasUserLost == false);
+            }
+        }
 
-            if (guess.amountOfGuesses == 3)
+
+
+
+        static int GetUserInput()
             {
-                Console.WriteLine("You lose! better luck next time!");
+                int userGuess;
+                while(true)
+                {
+                    if (int.TryParse(Console.ReadLine(), out userGuess) && userGuess >= 1 && userGuess <= 6)
+                    {
+                        return userGuess;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter a valid number between 1 and 6.");
+                    }
+                }
             }
     }
-    }
-}
+ }
